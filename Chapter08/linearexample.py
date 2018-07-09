@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-
 # Initialize class labels and set the seed of our pseudo-random number generator
 # '1' is chosen as the seed because it gives the 'correct classification'
 labels = ['dog', 'cat', 'panda']

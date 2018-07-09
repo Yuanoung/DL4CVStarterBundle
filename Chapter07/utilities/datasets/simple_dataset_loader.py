@@ -34,7 +34,7 @@ class SimpleDatasetLoader:
             data.append(image)
             labels.append(label)
 
-            if verbose > 0 and i > 0 and (i+1) % verbose == 0:
-                print('[INFO]: Processed {}/{}'.format(i+1, len(image_paths)))
+            if verbose > 0 and i > 0 and (i + 1) % verbose == 0:
+                print('[INFO]: Processed {}/{}'.format(i + 1, len(image_paths)))
 
         return (np.array(data), np.array(labels))
