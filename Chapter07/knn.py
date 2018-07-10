@@ -8,7 +8,6 @@ from sklearn.metrics import classification_report
 from utilities.preprocessing import SimplePreprocessor
 from utilities.datasets import SimpleDatasetLoader
 
-
 # Construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument('-d', '--dataset', required=True,
@@ -32,7 +31,7 @@ sdl = SimpleDatasetLoader(preprocessors=[sp])
 data = data.reshape((data.shape[0], 3072))
 
 # Print information about memory consumption
-print('[INFO]: Features Matrix: {:.1f}MB'.format(float(data.nbytes / 1024*1000.0)))
+print('[INFO]: Features Matrix: {:.1f}MB'.format(float(data.nbytes / 1024 * 1000.0)))
 
 # Encode labels as integers
 le = LabelEncoder()
