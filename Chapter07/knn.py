@@ -1,8 +1,8 @@
 import argparse
 from imutils import paths
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier  # k-NN algorithm
+from sklearn.preprocessing import LabelEncoder  # a helper utility to convert labels represented as strings to integer
+from sklearn.model_selection import train_test_split  # create our training and testing splits.
 from sklearn.metrics import classification_report
 
 from utilities.preprocessing import SimplePreprocessor
@@ -14,20 +14,25 @@ ap.add_argument('-d', '--dataset', required=True,
                 help='Path to input dataset')
 ap.add_argument('-n', '--neighbors', required=False, type=int, default=1,
                 help='# of nearest neighbors for classification')
-ap.add_argument('-j', '--jobs', required=False, type=int, default=-1,
+ap.add_argument('-j', '--jobs', required=False, type=int, default=-1,  # concurrent jobs
                 help='# of jobs for k-NN distance (-1 uses all available cores)')
 args = vars(ap.parse_args())
 
-# Get list of image paths
+# grab the list of images that we'll be describing
+print('[INFO]: Images loading....')
 image_paths = list(paths.list_images(args['dataset']))
 
-# Initialize SimplePreprocessor and SimpleDatasetLoader and load data and labels
-print('[INFO]: Images loading....')
+# initialize the image preprocessor, load the dataset from disk,
+# and reshape the data matrix
 sp = SimplePreprocessor(32, 32)
 sdl = SimpleDatasetLoader(preprocessors=[sp])
 (data, labels) = sdl.load(image_paths, verbose=500)
 
-# Reshape from (3000, 32, 32, 3) to (3000, 32*32*3=3072)
+# Reshape from (3000, 32, 32, 3), indicating there are 3,000 images in the dataset,
+# each 32 ×32 pixels with 3 channels.
+# 然而，为了应用k-NN算法，我们需要将我们的图像从3D表示“平坦化”为单个像素强度列表。
+# 我们为了实现这一点，在第30行调用数据NumPy数组上的.reshape方法，将32×32×3图像展平为具有形状（3000,3072）的数组。
+# 实际图像数据根本没有改变 - 图像简单地表示为3,000个条目的列表，每个条目为3,072-dim（32×32×3 = 3072）。
 data = data.reshape((data.shape[0], 3072))
 
 # Print information about memory consumption
@@ -38,6 +43,9 @@ le = LabelEncoder()
 labels = le.fit_transform(labels)
 
 # Split data into training (75%) and testing (25%) data
+# Therefore, we use the variables trainX and testX to refer to the
+# training and testing examples, respectively. The variables trainY and testY are our training and
+# testing labels.
 (train_x, test_x, train_y, test_y) = train_test_split(data, labels, test_size=0.25, random_state=42)
 
 # Train and evaluate the k-NN classifier on the raw pixel intensities
