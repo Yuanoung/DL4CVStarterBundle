@@ -1,8 +1,12 @@
+# import the necessary packages
 import argparse
 from imutils import paths
 from sklearn.neighbors import KNeighborsClassifier  # k-NN algorithm
-from sklearn.preprocessing import LabelEncoder  # a helper utility to convert labels represented as strings to integer
+# a helper utility to convert labels represented as strings to integer,
+# where there is one unique integer per class label
+from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split  # create our training and testing splits.
+# evaluate the performance of our classifier and print a nicely formatted table of results to our console
 from sklearn.metrics import classification_report
 
 from utilities.preprocessing import SimplePreprocessor
@@ -46,6 +50,8 @@ labels = le.fit_transform(labels)
 # Therefore, we use the variables trainX and testX to refer to the
 # training and testing examples, respectively. The variables trainY and testY are our training and
 # testing labels.
+# x: data
+# y: label
 (train_x, test_x, train_y, test_y) = train_test_split(data, labels, test_size=0.25, random_state=42)
 
 # Train and evaluate the k-NN classifier on the raw pixel intensities
@@ -53,5 +59,6 @@ print('[INFO]: Classification starting....')
 model = KNeighborsClassifier(n_neighbors=args['neighbors'],
                              n_jobs=args['jobs'])
 model.fit(train_x, train_y)
+# le.classes_: label of string
 print(classification_report(test_y, model.predict(test_x),
                             target_names=le.classes_))

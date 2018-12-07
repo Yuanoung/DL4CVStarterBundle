@@ -1,3 +1,4 @@
+# import the necessary packages
 import os
 import cv2
 import numpy as np
@@ -11,6 +12,8 @@ class SimpleDatasetLoader:
         # store the image preprocessor
         self.preprocessors = preprocessors
 
+        # if the preprocessors are None, initialize them as an
+        # empty list
         if self.preprocessors is None:
             self.preprocessors = []
 
@@ -21,8 +24,10 @@ class SimpleDatasetLoader:
         :param verbose: Parameter for printing information to console
         :return: Tuple of data and labels
         """
+        # initialize the list of features and labels
         data, labels = [], []
 
+        # loop over the input images
         for i, image_path in enumerate(image_paths):
             # load the image and extract the class label assuming
             # that our path has the following format:
